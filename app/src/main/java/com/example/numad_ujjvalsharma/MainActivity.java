@@ -22,8 +22,9 @@ public class MainActivity extends AppCompatActivity {
         Button linkCollector=(Button) findViewById(R.id.linkCollector);
         aboutMe.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                displayToast();
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MainActivity4.class);
+                view.getContext().startActivity(intent);
             }
         });
 
