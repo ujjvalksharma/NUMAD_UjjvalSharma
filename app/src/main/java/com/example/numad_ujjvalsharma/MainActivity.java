@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button aboutMe= (Button) findViewById(R.id.button);
         Button clickyClicky= (Button) findViewById(R.id.button2);
-
+        Button linkCollector=(Button) findViewById(R.id.linkCollector);
         aboutMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
                 view.getContext().startActivity(intent);
             }
         });
+
+        linkCollector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MainActivity3.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
     }
 
     public void displayToast(){
