@@ -2,8 +2,11 @@ package com.example.numad_ujjvalsharma;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +17,8 @@ public class MainActivity5 extends AppCompatActivity {
     Runnable startSearch;
     TextView currentNumberTextView;
     TextView foundPrimeTextView;
-    boolean isPrimeSearchOver=false;
+    boolean isPrimeSearchOver=true;
+    Handler handler =new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +28,56 @@ public class MainActivity5 extends AppCompatActivity {
         currentNumberTextView= (TextView) findViewById(R.id.textView4);
         foundPrimeTextView= (TextView) findViewById(R.id.textView5);
         EndSearch = ()->{
-            isPrimeSearchOver=true;
+
+            // Create the object of
+            // AlertDialog Builder class
+
+            Runnable dialogBoxRunnable=()->{
+                AlertDialog.Builder builder
+                        = new AlertDialog
+                        .Builder(MainActivity5.this);
+
+                builder.setMessage("Do you want to end prime search?");
+
+                builder.setTitle("Warning!");
+                builder.setCancelable(false);
+
+                builder.setPositiveButton(
+                        "Yes",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                isPrimeSearchOver=true;
+                                dialog.cancel();
+                            }
+                        });
+
+                builder.setNegativeButton(
+                        "No",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            };
+            handler.post(dialogBoxRunnable);
+
         };
 
          startSearch =()->{
 
+             if(!isPrimeSearchOver){
+                return;
+             }
             int num=2;
              isPrimeSearchOver=false;
             while(true){
