@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.numad_ujjvalsharma.CustomWidget.Ibutton;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         Button aboutMe= (Button) findViewById(R.id.button);
         Button clickyClicky= (Button) findViewById(R.id.button2);
         Button linkCollector=(Button) findViewById(R.id.linkCollector);
-        Button assignment5Btn=(Button) findViewById(R.id.button3);
+        Button assignment5Btn=(Button) findViewById(R.id.linkCollector);
 
         assignment5Btn.setOnClickListener(new View.OnClickListener() {
             @Override
