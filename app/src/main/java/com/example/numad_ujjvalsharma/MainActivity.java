@@ -20,6 +20,16 @@ public class MainActivity extends AppCompatActivity {
         Button aboutMe= (Button) findViewById(R.id.button);
         Button clickyClicky= (Button) findViewById(R.id.button2);
         Button linkCollector=(Button) findViewById(R.id.linkCollector);
+        Button assignment5Btn=(Button) findViewById(R.id.button3);
+
+        assignment5Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MainActivity5.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
         aboutMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
