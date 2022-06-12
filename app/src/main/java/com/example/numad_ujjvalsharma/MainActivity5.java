@@ -28,49 +28,7 @@ public class MainActivity5 extends AppCompatActivity {
         currentNumberTextView= (TextView) findViewById(R.id.textView4);
         foundPrimeTextView= (TextView) findViewById(R.id.textView5);
         EndSearch = ()->{
-
-            // Create the object of
-            // AlertDialog Builder class
-
-            Runnable dialogBoxRunnable=()->{
-                AlertDialog.Builder builder
-                        = new AlertDialog
-                        .Builder(MainActivity5.this);
-
-                builder.setMessage("Do you want to end prime search?");
-
-                builder.setTitle("Warning!");
-                builder.setCancelable(false);
-
-                builder.setPositiveButton(
-                        "Yes",
-                        new DialogInterface
-                                .OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                isPrimeSearchOver=true;
-                                dialog.cancel();
-                            }
-                        });
-
-                builder.setNegativeButton(
-                        "No",
-                        new DialogInterface
-                                .OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            };
-            handler.post(dialogBoxRunnable);
-
+            isPrimeSearchOver=true;
         };
 
          startSearch =()->{
@@ -96,7 +54,7 @@ public class MainActivity5 extends AppCompatActivity {
 
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -121,7 +79,53 @@ public class MainActivity5 extends AppCompatActivity {
 
     }
 
-    private boolean isPrime(int num) {
+
+    @Override
+    public void onBackPressed() {
+
+        Runnable dialogBoxRunnable=()->{
+            AlertDialog.Builder builder
+                    = new AlertDialog
+                    .Builder(MainActivity5.this);
+
+            builder.setMessage("Do you want to end prime search?");
+
+            builder.setTitle("Warning!");
+            builder.setCancelable(false);
+
+            builder.setPositiveButton(
+                    "Yes",
+                    new DialogInterface
+                            .OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                            int which) {
+                            finish();
+                            dialog.cancel();
+                        }
+                    });
+
+            builder.setNegativeButton(
+                    "No",
+                    new DialogInterface
+                            .OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                            int which) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        };
+        handler.post(dialogBoxRunnable);
+
+    }
+
+
+        private boolean isPrime(int num) {
 
         if(num==2){
             return true;
