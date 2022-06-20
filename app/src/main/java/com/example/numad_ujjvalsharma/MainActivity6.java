@@ -29,6 +29,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class MainActivity6 extends AppCompatActivity {
 
     private LocationRequest locationRequest;
@@ -38,7 +41,7 @@ TextView totalDistanceTextView=null;
 double prevLatitue;
 double prevLongitude;
 boolean isPrevLatAndLongSet=false;
-float totalDistance=0;
+double totalDistance=0;
 Button resetDistanceBtn;
     Handler handler =new Handler();
     @Override
@@ -49,8 +52,15 @@ Button resetDistanceBtn;
         latitudeTextView=(TextView) findViewById(R.id.textView7);
         totalDistanceTextView=(TextView) findViewById(R.id.textView8);
         resetDistanceBtn=(Button) findViewById(R.id.button7);
+        Button showLocationSvc=(Button) findViewById(R.id.button8);
+        showLocationSvc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        recreate();
+                    }
+                });
         if (savedInstanceState != null) {
-            totalDistance=savedInstanceState.getFloat("totalDistance");
+            totalDistance=savedInstanceState.getDouble("totalDistance");
         }
         Spinner precisionDropDown = (Spinner) findViewById(R.id.spinner);
         String[] items = new String[]{"High Precision", "Low Precision"};
@@ -88,29 +98,6 @@ Button resetDistanceBtn;
                 totalDistanceTextView.setText("Total Distance:"+totalDistance+"m");
             }
         });
-        ActivityResultLauncher<String[]> locationPermissionRequest =
-                registerForActivityResult(new ActivityResultContracts
-                                .RequestMultiplePermissions(), result -> {
-                            Boolean fineLocationGranted = result.getOrDefault(
-                                    Manifest.permission.ACCESS_FINE_LOCATION, false);
-                            Boolean coarseLocationGranted = result.getOrDefault(
-                                    Manifest.permission.ACCESS_COARSE_LOCATION,false);
-                            if (fineLocationGranted != null && fineLocationGranted) {
-                                // Precise location access granted.
-                            } else if (coarseLocationGranted != null && coarseLocationGranted) {
-                                // Only approximate location access granted.
-                            } else {
-                                // No location access granted.
-                            }
-                        }
-                );
-
-        locationPermissionRequest.launch(new String[] {
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        });
-
-        //high precision high battery consumption
         startLocationUpdates(100);
     }
 
@@ -118,49 +105,44 @@ Button resetDistanceBtn;
         locationRequest = new LocationRequest();
         locationRequest.setPriority(priority);
         locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(2000);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(locationRequest);
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-        settingsClient.checkLocationSettings(locationSettingsRequest);
+        locationRequest.setFastestInterval(1000);
+        ActivityCompat.requestPermissions(MainActivity6.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+            Toast.makeText(this, "You can't use percise location without granting permission", Toast.LENGTH_SHORT).show();
+            locationRequest = new LocationRequest();
+            locationRequest.setPriority(104);
+            locationRequest.setInterval(5000);
+            locationRequest.setFastestInterval(2000);
         }
+
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
-                        onLocationChanged(locationResult.getLastLocation());
+                          if(locationResult.getLastLocation().getAccuracy()>=5){
+                        longitudeTextView.setText("longitude:" + locationResult.getLastLocation().getLongitude());
+                        latitudeTextView.setText("longitude:" + locationResult.getLastLocation().getLatitude());
+                        if (isPrevLatAndLongSet) {
+                            float[] results = new float[1];
+                            android.location.Location.distanceBetween(prevLatitue, prevLongitude,
+                                    locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude(), results);
+                            float distance = results[0];
+                            totalDistance += distance;
+
+                            totalDistanceTextView.setText("Total Distance:" + totalDistance + "m");
+                        } else {
+                            prevLatitue = locationResult.getLastLocation().getLatitude();
+                            prevLongitude = locationResult.getLastLocation().getLongitude();
+                            isPrevLatAndLongSet = true;
+                            totalDistanceTextView.setText("Total Distance:" + totalDistance + "m");
+                        }
+                          }
+
                     }
                 },
                 Looper.myLooper());
     }
-
-    public void onLocationChanged(Location location) {
-
-        if(location.getAccuracy()>=10){
-            longitudeTextView.setText("longitude:"+location.getLongitude());
-            latitudeTextView.setText("longitude:"+location.getLatitude());
-
-
-            if(isPrevLatAndLongSet){
-                float[] results = new float[1];
-                android.location.Location.distanceBetween(prevLatitue, prevLongitude,
-                        location.getLatitude(), location.getLongitude(), results);
-                float distance = results[0];
-                totalDistance+=distance;
-
-                totalDistanceTextView.setText("Total Distance:"+totalDistance+"m");
-            }else{
-                prevLatitue=location.getLatitude();
-                prevLongitude=location.getLongitude();
-                isPrevLatAndLongSet=true;
-                totalDistanceTextView.setText("Total Distance:"+totalDistance+"m");
-            }
-        }
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -210,7 +192,7 @@ Button resetDistanceBtn;
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putFloat("totalDistance",totalDistance);
+        outState.putDouble("totalDistance",totalDistance);
     }
 
 }
