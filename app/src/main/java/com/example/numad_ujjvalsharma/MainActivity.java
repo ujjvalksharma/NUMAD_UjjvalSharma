@@ -19,6 +19,15 @@ public class MainActivity extends AppCompatActivity {
         Button clickyClicky= (Button) findViewById(R.id.button2);
         Button linkCollector=(Button) findViewById(R.id.linkCollector);
         Button assignment5Btn=(Button) findViewById(R.id.button3);
+        Button locationBtn=(Button) findViewById(R.id.button6);
+
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MainActivity6.class);
+                view.getContext().startActivity(intent);
+            }
+        });
 
         assignment5Btn.setOnClickListener(new View.OnClickListener() {
             @Override
