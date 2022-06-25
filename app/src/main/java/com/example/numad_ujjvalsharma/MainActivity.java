@@ -20,11 +20,19 @@ public class MainActivity extends AppCompatActivity {
         Button linkCollector=(Button) findViewById(R.id.linkCollector);
         Button assignment5Btn=(Button) findViewById(R.id.button3);
         Button locationBtn=(Button) findViewById(R.id.button6);
-
+        Button atYourServiceBtn=(Button) findViewById(R.id.button9);
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), MainActivity6.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        atYourServiceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MainActivity7.class);
                 view.getContext().startActivity(intent);
             }
         });
