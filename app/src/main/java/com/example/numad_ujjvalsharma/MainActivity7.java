@@ -3,8 +3,6 @@ package com.example.numad_ujjvalsharma;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity7 extends AppCompatActivity implements MyActivity7RecycleViewAdaptor.NameClickListener {
 
@@ -217,8 +214,6 @@ boolean isProductIdValid=false;
                             productCategoryJson.getString("image"));
                     products.add(product);
                 }
-
-                System.out.println("--------------------------------");
             }
             progressBar.setVisibility(View.INVISIBLE);
             if(this.products.size()!=0){
@@ -286,8 +281,6 @@ boolean isProductIdValid=false;
     }
 
     private void displayResults(List<Product> products) {
-        System.out.println("products:"+products);
-
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {

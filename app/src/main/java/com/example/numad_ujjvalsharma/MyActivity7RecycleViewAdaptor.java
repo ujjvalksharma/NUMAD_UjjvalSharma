@@ -10,14 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyActivity7RecycleViewAdaptor extends RecyclerView.Adapter<MyActivity7RecycleViewAdaptor.ViewHolder>{
@@ -38,7 +32,6 @@ public class MyActivity7RecycleViewAdaptor extends RecyclerView.Adapter<MyActivi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        System.out.println(products);
         viewHolder.textViewProductTitle.setText("Name: "+products.get(position).title);
         viewHolder.textViewProductPrice.setText("Price: "+products.get(position).price+"$");
 
